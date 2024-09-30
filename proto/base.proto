@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package protorpc;
+
+message Error {
+    int32   code    = 1;
+    string  message = 2;
+}
+
+message ClientMessage {
+    uint64  id      = 1;
+    bool is_req = 2;
+    string  method  = 3;
+    repeated bytes params  = 4;
+
+    bytes   result  = 5; //ADD req mod no need
+    Error   error   = 6; //ADD req mod no need
+}
+
+message ServerMessage {
+    uint64  id      = 1;
+    bool is_req = 2;
+    string  method  = 3; //ADD req mod no need
+    repeated bytes params  = 4; //ADD req mod no need
+
+    bytes   result  = 5;
+    Error   error   = 6;
+}

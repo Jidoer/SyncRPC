@@ -1,0 +1,15 @@
+{
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.errorSquiggles": "Enabled",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/local/include",
+        "/usr/include"
+    ],
+    "C_Cpp.default.defines": [
+        "DEBUG"
+    ],
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++17"
+}

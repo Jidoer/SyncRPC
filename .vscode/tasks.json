@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build protorpc_server",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "protorpc_server.cpp",
+                "generated/*.cc",
+                "-o", "protorpc_server",
+                "-I", "proto",
+                "-I", "generated",
+                "-lpthread"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "run protorpc_server",
+            "type": "shell",
+            "command": "./protorpc_server",
+            "group": "test",
+            "dependsOn": "build protorpc_server",
+            "problemMatcher": []
+        },
+        {
+            "label": "build protorpc_client",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "protorpc_client.cpp",
+                "generated/*.cc",
+                "-o", "protorpc_client",
+                "-I", "proto",
+                "-I", "generated",
+                "-lpthread"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "run protorpc_client",
+            "type": "shell",
+            "command": "./protorpc_client",
+            "group": "test",
+            "dependsOn": "build protorpc_client",
+            "problemMatcher": []
+        }
+    ]
+}
