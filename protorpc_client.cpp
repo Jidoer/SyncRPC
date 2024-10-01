@@ -124,6 +124,13 @@ namespace protorpc
             {
                 // client server
                 // unpack -> Request::ParseFromArray -> router -> Response::SerializeToArray -> pack -> Channel::write
+                printf("onMessage len=%d\n", buf->size());
+                char *buff = (char *)buf->data();
+                for (int i = 0; i < buf->size(); i++)
+                {
+                    printf("%02x ", buff[i]);
+                }
+                printf("\n");
 
                 // protorpc_unpack
                 protorpc_message msg;
@@ -144,11 +151,14 @@ namespace protorpc
                 // add client func
                 protorpc::ServerMessage req; // serever --> client(me)
                 protorpc::ClientMessage res; //(me) -> server
-                // end
-                // client 's router
-                if (req.is_req())
+                                             // end
+                                             // client 's router
+
+                // if (req.is_req()) // wrong!!!!!!!!!!!!!!!! not parse
+                //{
+                if (req.ParseFromArray(msg.body, msg.head.length))
                 {
-                    if (req.ParseFromArray(msg.body, msg.head.length))
+                    if (req.is_req())
                     {
                         printf("> %s\n", req.DebugString().c_str());
                         res.set_id(req.id());
@@ -168,28 +178,31 @@ namespace protorpc
                         {
                             client_not_found(req, &res);
                         }
+                        // Response::SerializeToArray + protorpc_pack
+                        protorpc_message_init(&msg);
+                        msg.head.length = res.ByteSize();
+                        packlen = protorpc_package_length(&msg.head);
+                        unsigned char *writebuf = NULL;
+                        HV_STACK_ALLOC(writebuf, packlen);
+                        packlen = protorpc_pack(&msg, writebuf, packlen);
+                        if (packlen > 0)
+                        {
+                            printf("< %s\n", res.DebugString().c_str());
+                            res.SerializeToArray(writebuf + PROTORPC_HEAD_LENGTH, msg.head.length);
+                            channel->write(writebuf, packlen);
+                        }
+                        HV_STACK_FREE(writebuf);
+                        return;
                     }
-                    else
-                    {
-                        client_bad_request(req, &res);
-                    }
-
-                    // Response::SerializeToArray + protorpc_pack
-                    protorpc_message_init(&msg);
-                    msg.head.length = res.ByteSize();
-                    packlen = protorpc_package_length(&msg.head);
-                    unsigned char *writebuf = NULL;
-                    HV_STACK_ALLOC(writebuf, packlen);
-                    packlen = protorpc_pack(&msg, writebuf, packlen);
-                    if (packlen > 0)
-                    {
-                        printf("< %s\n", res.DebugString().c_str());
-                        res.SerializeToArray(writebuf + PROTORPC_HEAD_LENGTH, msg.head.length);
-                        channel->write(writebuf, packlen);
-                    }
-                    HV_STACK_FREE(writebuf);
+                }
+                else
+                {
+                    client_bad_request(req, &res);
+                    printf("client_bad_request\n");
                     return;
                 }
+                // return;
+                //}
 
                 auto res0 = std::make_shared<protorpc::ClientMessage>(); // client(me)---ing--->server
                 if (!res0->ParseFromArray(msg.body, msg.head.length))
@@ -243,9 +256,21 @@ namespace protorpc
             packlen = protorpc_pack(&msg, writebuf, packlen);
             if (packlen > 0)
             {
+                // edbug
+                printf("writebuf: ");
+                for (int i = 0; i < packlen; ++i)
+                {
+                    printf("%02x ", writebuf[i]);
+                }
+                printf("\n");
                 printf("%s\n", req->DebugString().c_str());
                 req->SerializeToArray(writebuf + PROTORPC_HEAD_LENGTH, msg.head.length);
                 channel->write(writebuf, packlen);
+            }
+            printf("writebuf1: ");
+            for (int i = 0; i < packlen; ++i)
+            {
+                printf("%02x ", writebuf[i]);
             }
             HV_STACK_FREE(writebuf);
             // wait until response come or timeout
@@ -286,6 +311,7 @@ namespace protorpc
             auto req = std::make_shared<protorpc::ServerMessage>();
             // method
             req->set_method("rpc_client_test");
+            req->set_is_req(true);
             // params
             req->add_params()->assign(param.SerializeAsString());
 
@@ -340,19 +366,22 @@ int main(int argc, char **argv)
         return -20;
     }
 
-    // // test login
-    // {
-    //     protorpc::LoginParam param;
-    //     param.set_username("admin");
-    //     param.set_password("123456");
-    //     protorpc::LoginResult result;
-    //     if (cli.login(param, &result) == protorpc::kRpcSuccess) {
-    //         printf("login success!\n");
-    //         printf("%s\n", result.DebugString().c_str());
-    //     } else {
-    //         printf("login failed!\n");
-    //     }
-    // }
+    // test login
+    {
+        protorpc::LoginParam param;
+        param.set_username("admin");
+        param.set_password("123456");
+        protorpc::LoginResult result;
+        if (cli.client_test(param, &result) == protorpc::kRpcSuccess)
+        {
+            printf("login success!\n");
+            printf("%s\n", result.DebugString().c_str());
+        }
+        else
+        {
+            printf("login failed!\n");
+        }
+    }
 
     // test calc
     // {
@@ -366,5 +395,11 @@ int main(int argc, char **argv)
     //         printf("calc failed!\n");
     //     }
     // }
+
+    while (1)
+    {
+        /* code */
+    }
+
     return 0;
 }
