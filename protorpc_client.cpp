@@ -161,6 +161,7 @@ namespace protorpc
                     if (req.is_req())
                     {
                         printf("> %s\n", req.DebugString().c_str());
+                        printf("> method = %s\n", req.method().c_str());
                         res.set_id(req.id());
                         // router
                         const char *method = req.method().c_str();
@@ -169,6 +170,7 @@ namespace protorpc
                         {
                             if (strcmp(method, router[i].method) == 0)
                             {
+                                printf("> found method %s\n", router[i].method);
                                 found = true;
                                 router[i].handler(req, &res);
                                 break;
@@ -257,21 +259,23 @@ namespace protorpc
             if (packlen > 0)
             {
                 // edbug
-                printf("writebuf: ");
-                for (int i = 0; i < packlen; ++i)
-                {
-                    printf("%02x ", writebuf[i]);
-                }
+                // printf("writebuf: ");
+                // for (int i = 0; i < packlen; ++i)
+                // {
+                //     printf("%02x ", writebuf[i]);
+                // }
                 printf("\n");
                 printf("%s\n", req->DebugString().c_str());
                 req->SerializeToArray(writebuf + PROTORPC_HEAD_LENGTH, msg.head.length);
                 channel->write(writebuf, packlen);
             }
-            printf("writebuf1: ");
+            printf("call writebuf->: ");
             for (int i = 0; i < packlen; ++i)
             {
                 printf("%02x ", writebuf[i]);
             }
+            printf("\n");
+
             HV_STACK_FREE(writebuf);
             // wait until response come or timeout
             ctx->wait(timeout_ms);
