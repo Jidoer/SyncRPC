@@ -31,18 +31,20 @@
         {
             "label": "build protorpc_client",
             "type": "shell",
-            "command": "g++",
-            "args": [
-                "-g",
-                "protorpc_client.cpp",
-                "generated/*.cc",
-                "-o", "protorpc_client",
-                "-I", "proto",
-                "-I", "generated",
-                "-lpthread"
-            ],
-            "group": "build",
-            "problemMatcher": ["$gcc"]
+            // "command": "g++",
+            // "args": [
+            //     "-g",
+            //     "protorpc_client.cpp",
+            //     "generated/*.cc",
+            //     "-o", "protorpc_client",
+            //     "-I", "proto",
+            //     "-I", "generated",
+            //     "-lpthread"
+            // ],
+            // "group": "build",
+            "problemMatcher": ["$gcc"],
+            "command": "make",
+            //"args": [""],
         },
         {
             "label": "run protorpc_client",

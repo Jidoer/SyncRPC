@@ -124,7 +124,7 @@ namespace protorpc
             {
                 // client server
                 // unpack -> Request::ParseFromArray -> router -> Response::SerializeToArray -> pack -> Channel::write
-                printf("onMessage len=%d\n", buf->size());
+                printf("onMessage len=%li\n", buf->size());
                 char *buff = (char *)buf->data();
                 for (int i = 0; i < buf->size(); i++)
                 {

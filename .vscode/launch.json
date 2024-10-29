@@ -28,7 +28,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/protorpc_client",
-            "args": [],
+            "args": ["127.0.0.1","7070","add","1","2"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
