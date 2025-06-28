@@ -16,9 +16,9 @@ using namespace hv;
 
 #include "protorpc.h"
 #include "../../../usr/include/google/protobuf/stubs/common.h"
-#include "generated/base.pb.h"
-#include "generated/calc.pb.h"
-#include "generated/login.pb.h"
+#include "../common/generated/base.pb.h"
+#include "../common/generated/calc.pb.h"
+#include "../common/generated/login.pb.h"
 #include "router_cilent.h"
 // #include "handler/client_func_test.h"
 

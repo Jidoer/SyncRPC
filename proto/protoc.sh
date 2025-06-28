@@ -10,7 +10,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-CPP_OUT_DIR=../generated
+CPP_OUT_DIR=../src/generated
 if [ ! -d "${CPP_OUT_DIR}" ]; then
     mkdir -p ${CPP_OUT_DIR}
 fi

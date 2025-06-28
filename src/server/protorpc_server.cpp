@@ -13,7 +13,7 @@ using namespace hv;
 
 #include "protorpc.h"
 #include "router_server.h"
-#include "handler/server_handler.h"
+#include "./handler/server_handler.h"
 // #include "handler/login.h"
 
 // valgrind --leak-check=full --show-leak-kinds=all

@@ -1,7 +1,9 @@
 #ifndef HV_PROTO_RPC_ROUTER_H_
 #define HV_PROTO_RPC_ROUTER_H_
+#ifdef CLIENT
 
-#include "generated/base.pb.h"
+#include "../common/generated/base.pb.h"
+#include "../common/generated/calc.pb.h"
 
 typedef void (*protorpc_handler)(const protorpc::ServerMessage &req, protorpc::ClientMessage *res);
 
@@ -51,5 +53,5 @@ void rpc_client_test(const protorpc::ServerMessage &req, protorpc::ClientMessage
     result.set_token(param.username() + ":" + param.password());
     res->set_result(result.SerializeAsString());
 }
-
+#endif
 #endif // HV_PROTO_RPC_ROUTER_H_

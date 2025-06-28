@@ -1,19 +1,18 @@
 #ifndef HV_PROTO_RPC_HANDLER_LOGIN_H_
 #define HV_PROTO_RPC_HANDLER_LOGIN_H_
 
-#include <base.pb.h>
-#include "../generated/login.pb.h"
-#include "../router_cilent.h"
+#include "router_server.h"
 
-void rpc_client_test(const protorpc::ServerMessage& req, protorpc::ClientMessage* res) {
+#include "../common/generated/login.pb.h"
+
+void rpc_server_login(const protorpc::ClientMessage& req, protorpc::ServerMessage* res) {
     // params
     if (req.params_size() == 0) {
-        // return bad_request(req, res);
-        return client_bad_request(req, res);
+        return server_bad_request(req, res);
     }
     protorpc::LoginParam param;
     if (!param.ParseFromString(req.params(0))) {
-        return client_bad_request(req, res);
+        return server_bad_request(req, res);
     }
 
     // result

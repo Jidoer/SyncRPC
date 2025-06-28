@@ -13,8 +13,15 @@
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.cppStandard": "c++17",
     "files.associations": {
+        "*.js": "javascript",
+        "*.json": "jsonc",
+        "*.cjson": "jsonc",
+        "*.wxss": "css",
+        "*.wxs": "javascript",
         "*.v": "v",
         "*.ts": "typescript",
-        "condition_variable": "cpp"
+        "condition_variable": "cpp",
+        "*.inc": "cpp",
+        "protorpc.h": "c"
     }
 }

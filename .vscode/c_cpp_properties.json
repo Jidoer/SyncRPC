@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/include",
+                "${workspaceFolder}/src/common/generated",
+                "${workspaceFolder}/src/client/handler",
+                "${workspaceFolder}/src/server/handler",
+                "${workspaceFolder}/src/common",
+                "${workspaceFolder}/proto"
+            ],
+            "defines": [
+                "SERVER",
+                "CLIENT"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
